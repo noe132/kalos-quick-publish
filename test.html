@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>test</title>
+  <!-- preflight-injection-point -->
+  <!-- mui-insertion-point -->
+</head>
+
+<body>
+  <div id="root">
+    <div class="loading"></div>
+  </div>
+  <script>
+    document.acceptImgs = (params) => {
+      console.log('hook called with', params)
+    }
+  </script>
+</body>
+
+</html>

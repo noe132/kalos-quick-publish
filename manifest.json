@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Kalos Quick Publisher",
+  "description": "Publish AI Arts to Karlos.art with One Click",
+  "version": "1.0",
+  "icons": {
+    "16": "images/2.png",
+    "32": "images/2.png",
+    "48": "images/2.png",
+    "128": "images/2.png"
+  },
+  "action": {},
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://kalos.art/*",
+    "https://test.prsdev.club/*"
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "dist/upload_content.js"
+      ],
+      "matches": [
+        "https://kalos.art/upload",
+        "https://test.prsdev.club/upload"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  }
+}
