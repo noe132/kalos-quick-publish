@@ -3,12 +3,14 @@
   "author": "karlos.art",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "rimraf dist && tsc"
   },
   "devDependencies": {
     "@noe132/eslint-config-base": "^0.1.9",
+    "chokidar": "^3.5.3",
     "chrome-types": "^0.1.200",
-    "eslint": "^8.42.0"
+    "eslint": "^8.42.0",
+    "rimraf": "^5.0.1"
   },
   "dependencies": {
     "typescript": "^5.1.3"

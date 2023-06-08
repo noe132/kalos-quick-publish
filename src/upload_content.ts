@@ -1,9 +1,10 @@
 const uploadMain = async () => {
-  for (let i = 0; i < 200; i += 1) {
+  console.log('upload content script')
+  for (let i = 0; i < 4 * 60; i += 1) {
     const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]')
     const promptInput = document.querySelector<HTMLInputElement>('#product-prompt')
     if (!fileInput || !promptInput) {
-      await new Promise((rs) => setTimeout(rs, 500))
+      await new Promise((rs) => setTimeout(rs, 250))
       continue
     }
     chrome.runtime.sendMessage({

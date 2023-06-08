@@ -33,19 +33,11 @@ chrome.tabs.onActivated.addListener(async (params) => {
   }
 })
 
-chrome.scripting.registerContentScripts([{
-  id: 'upload-content-script',
-  js: ['dist/upload_content.js'],
-  persistAcrossSessions: false,
-  matches: ['*://example.com/*'],
-  runAt: 'document_start',
-}])
-
 chrome.tabs.onRemoved.addListener((tabId) => {
   uploadState.delete(tabId)
 })
 
-chrome.runtime.onMessage.addListener((request, sender, _sendResponse) => {
+chrome.runtime.onMessage.addListener(((request: any, sender: chrome.runtime.MessageSender, _sendResponse: any) => {
   const data = request as SendMessageData
   // console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
   const tabId = sender.tab?.id
@@ -65,28 +57,45 @@ chrome.runtime.onMessage.addListener((request, sender, _sendResponse) => {
       const item = uploadState.get(tabId)
       if (!item) { return }
       console.log('request', item)
-      chrome.scripting.executeScript({
-        target: { tabId },
-        func: ((img: Array<number>, prompt: string) => {
-          console.log({ img, prompt })
-          const acceptImgs = (document as any).acceptImgs
-          console.log(acceptImgs)
-          if (acceptImgs) {
-            acceptImgs({
-              img,
-              prompt,
-            })
-          }
-        }) as any,
-        args: [item.img, item.prompt],
-        world: 'MAIN',
-      })
+      if (/Firefox\/\d+/.test(navigator.userAgent)) {
+        chrome.scripting.executeScript({
+          target: { tabId },
+          func: ((img: Array<number>, prompt: string) => {
+            const acceptImgs = (window as any).wrappedJSObject.document.acceptImgs
+            if (acceptImgs) {
+              const w = (window as any).wrappedJSObject
+              acceptImgs(w.JSON.parse(JSON.stringify({
+                img,
+                prompt,
+              })))
+              console.log('2')
+            }
+          }) as any,
+          args: [item.img, item.prompt],
+        })
+      } else {
+        chrome.scripting.executeScript({
+          target: { tabId },
+          func: ((img: Array<number>, prompt: string) => {
+            console.log({ img, prompt })
+            const acceptImgs = (document as any).acceptImgs
+            console.log(acceptImgs)
+            if (acceptImgs) {
+              acceptImgs({
+                img,
+                prompt,
+              })
+            }
+          }) as any,
+          args: [item.img, item.prompt],
+          world: 'MAIN',
+        })
+      }
     }
   }
 
   run()
-  return true
-})
+}) as any)
 
 chrome.action.onClicked.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
