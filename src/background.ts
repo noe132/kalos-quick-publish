@@ -3,18 +3,30 @@ interface TabStateItem {
   img: Array<number>
 }
 
+const activeIconSet = {
+  '16': '/images/chrome_ext_active_16.png',
+  '32': '/images/chrome_ext_active_32.png',
+  '48': '/images/chrome_ext_active_48.png',
+  '128': '/images/chrome_ext_active_128.png',
+  '512': '/images/chrome_ext_active_512.png',
+}
+const unactiveIconSet = {
+  '16': '/images/chrome_ext_unactive_16.png',
+  '32': '/images/chrome_ext_unactive_32.png',
+  '48': '/images/chrome_ext_unactive_48.png',
+  '128': '/images/chrome_ext_unactive_128.png',
+  '512': '/images/chrome_ext_unactive_512.png',
+}
 const midJourney = /https:\/\/www\.midjourney\.com\/app\/jobs\/.*/i
-const kalosUploadPage = 'https://test.prsdev.club/upload'
+const kalosUploadPage = 'https://kalos.art/upload'
 const uploadState = new Map<number, TabStateItem>()
 
 chrome.tabs.onUpdated.addListener((tabId, _info, tab) => {
   const match = !!tab.url && midJourney.test(tab.url)
-  if (match) {
-    chrome.action.setIcon({
-      path: '/images/1.png',
-      tabId,
-    })
-  }
+  chrome.action.setIcon({
+    path: match ? activeIconSet : unactiveIconSet,
+    tabId,
+  })
 })
 
 chrome.tabs.onActivated.addListener(async (params) => {
@@ -22,12 +34,10 @@ chrome.tabs.onActivated.addListener(async (params) => {
     const tabId = params.tabId
     const tab = await chrome.tabs.get(tabId)
     const match = !!tab.url && midJourney.test(tab.url)
-    if (match) {
-      chrome.action.setIcon({
-        path: '/images/1.png',
-        tabId,
-      })
-    }
+    chrome.action.setIcon({
+      path: match ? activeIconSet : unactiveIconSet,
+      tabId,
+    })
   } catch (e) {
 
   }
@@ -39,7 +49,6 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 chrome.runtime.onMessage.addListener(((request: any, sender: chrome.runtime.MessageSender, _sendResponse: any) => {
   const data = request as SendMessageData
-  // console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension')
   const tabId = sender.tab?.id
   if (!tabId) { return }
 
@@ -56,7 +65,6 @@ chrome.runtime.onMessage.addListener(((request: any, sender: chrome.runtime.Mess
     if (data.type === 'upload-data-request') {
       const item = uploadState.get(tabId)
       if (!item) { return }
-      console.log('request', item)
       if (/Firefox\/\d+/.test(navigator.userAgent)) {
         chrome.scripting.executeScript({
           target: { tabId },
@@ -65,10 +73,10 @@ chrome.runtime.onMessage.addListener(((request: any, sender: chrome.runtime.Mess
             if (acceptImgs) {
               const w = (window as any).wrappedJSObject
               acceptImgs(w.JSON.parse(JSON.stringify({
+                model: 'Midjourney',
                 img,
                 prompt,
               })))
-              console.log('2')
             }
           }) as any,
           args: [item.img, item.prompt],
@@ -77,11 +85,10 @@ chrome.runtime.onMessage.addListener(((request: any, sender: chrome.runtime.Mess
         chrome.scripting.executeScript({
           target: { tabId },
           func: ((img: Array<number>, prompt: string) => {
-            console.log({ img, prompt })
             const acceptImgs = (document as any).acceptImgs
-            console.log(acceptImgs)
             if (acceptImgs) {
               acceptImgs({
+                model: 'Midjourney',
                 img,
                 prompt,
               })

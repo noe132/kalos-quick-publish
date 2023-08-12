@@ -1,24 +1,28 @@
 {
   "manifest_version": 3,
-  "name": "Kalos Quick Publisher",
-  "description": "Publish AI Arts to Karlos.art with One Click",
-  "version": "1.0",
+  "name": "KALOS.art Post",
+  "description": "Share your artworks generated on Midjourney with KALOS.art, just one click.",
+  "version": "1.0.0",
   "icons": {
-    "16": "images/2.png",
-    "32": "images/2.png",
-    "48": "images/2.png",
-    "96": "images/2.png",
-    "128": "images/2.png"
+    "16": "images/chrome_ext_active_16.png",
+    "32": "images/chrome_ext_active_32.png",
+    "48": "images/chrome_ext_active_48.png",
+    "128": "images/chrome_ext_active_128.png",
+    "512": "images/chrome_ext_active_512.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kalos-art-post@kalos.art",
+      "strict_min_version": "109.0"
+    }
   },
   "action": {},
   "permissions": [
     "activeTab",
-    "tabs",
     "scripting"
   ],
   "host_permissions": [
-    "https://kalos.art/*",
-    "https://test.prsdev.club/*"
+    "https://kalos.art/*"
   ],
   "content_scripts": [
     {
@@ -27,12 +31,13 @@
       ],
       "matches": [
         "https://*/*",
-        "https://kalos.art/upload/*",
-        "https://test.prsdev.club/upload/*"
+        "https://kalos.art/upload/*"
       ]
     }
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   }
 }

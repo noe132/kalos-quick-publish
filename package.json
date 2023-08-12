@@ -1,6 +1,6 @@
 {
-  "name": "karlos-quick-publish",
-  "author": "karlos.art",
+  "name": "kalos-quick-publish",
+  "author": "kalos.art",
   "scripts": {
     "dev": "tsc --watch",
     "build": "rimraf dist && tsc"
