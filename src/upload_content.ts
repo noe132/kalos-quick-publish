@@ -1,5 +1,4 @@
 const uploadMain = async () => {
-  console.log('upload content script')
   for (let i = 0; i < 4 * 60; i += 1) {
     const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]')
     const promptInput = document.querySelector<HTMLInputElement>('#product-prompt')

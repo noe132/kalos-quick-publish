@@ -2,17 +2,18 @@
   "name": "kalos-quick-publish",
   "author": "kalos.art",
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "node build/dev-server.js",
     "build": "rimraf dist && tsc"
   },
   "devDependencies": {
-    "@noe132/eslint-config-base": "^0.1.9",
+    "@babel/core": "^7.22.10",
+    "@noe132/eslint-config-base": "^0.1.10",
     "chokidar": "^3.5.3",
-    "chrome-types": "^0.1.200",
-    "eslint": "^8.42.0",
+    "chrome-types": "^0.1.222",
+    "eslint": "^8.47.0",
     "rimraf": "^5.0.1"
   },
   "dependencies": {
-    "typescript": "^5.1.3"
+    "typescript": "^5.1.6"
   }
 }

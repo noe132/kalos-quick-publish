@@ -18,20 +18,30 @@
   },
   "action": {},
   "permissions": [
+    "tabs",
     "activeTab",
     "scripting"
   ],
   "host_permissions": [
-    "https://kalos.art/*"
+    "http://local.test.prsdev.club/*"
   ],
   "content_scripts": [
     {
       "js": [
         "upload_content.js"
+      ],  
+      "matches": [
+        "http://local.test.prsdev.club/upload",
+        "http://local.test.prsdev.club/upload/*"
+      ]
+    },
+    {
+      "js": [
+        "post_upload_content.js"
       ],
       "matches": [
-        "https://*/*",
-        "https://kalos.art/upload/*"
+        "http://local.test.prsdev.club/upload-post",
+        "http://local.test.prsdev.club/upload-post/*"
       ]
     }
   ],

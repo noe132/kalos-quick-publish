@@ -16,21 +16,32 @@ const chromeImagesDir = path.join(root, 'packaged/chrome/images')
 const watchCopyManifest = () => {
   const manifestFile = path.join(root, 'manifest.json')
   const watcher = chokidar.watch(manifestFile)
-  let copy = async (p) => {
-    await fs.copyFile(p, p.replace(root, firefoxDir))
+  const copy = async (p) => {
+    // await new Promise(rs => setTimeout(rs, 100))
+    // await fs.copyFile(p, p.replace(root, firefoxDir))
+    console.log('copy', p)
     const file = await fs.readFile(manifestFile)
     try {
-      const manifest = JSON.parse(file.toString())
-      manifest.background = {
-        "service_worker": manifest.background.scripts[0]
+      const manifestChrome = JSON.parse(file.toString())
+      const manifestFirefox = JSON.parse(file.toString())
+      manifestChrome.background = {
+        service_worker: manifestChrome.background.scripts[0],
       }
-      const output = JSON.stringify(manifest, null, 2)
-      fs.writeFile(p.replace(root, chromeDir), output)
+      delete manifestChrome.browser_specific_settings
+      fs.writeFile(
+        p.replace(root, chromeDir),
+        JSON.stringify(manifestChrome, null, 2),
+      )
+      fs.writeFile(
+        p.replace(root, firefoxDir),
+        JSON.stringify(manifestFirefox, null, 2),
+      )
     } catch (e) {
+      if (!file.length) { return }
       console.error(e)
     }
   }
-  let unlink = (p) => {
+  const unlink = (p) => {
     fs.unlink(p.replace(root, firefoxDir))
     fs.unlink(p.replace(root, chromeDir))
   }
@@ -43,11 +54,12 @@ const watchCopyManifest = () => {
 
 const watchCopyJs = () => {
   const watcher = chokidar.watch(path.join(dist, '**/*'))
-  let copy = (p) => {
+  const copy = (p) => {
+    console.log('copy', p)
     fs.copyFile(p, p.replace(dist, firefoxDir))
     fs.copyFile(p, p.replace(dist, chromeDir))
   }
-  let unlink = (p) => {
+  const unlink = (p) => {
     fs.unlink(p.replace(dist, firefoxDir))
     fs.unlink(p.replace(dist, chromeDir))
   }
@@ -60,7 +72,8 @@ const watchCopyJs = () => {
 
 const watchCopyImages = () => {
   const watcher = chokidar.watch(path.join(imagesDir, '**/*'))
-  let copy = (p) => {
+  const copy = (p) => {
+    console.log('copy', p)
     fs.copyFile(p, p.replace(imagesDir, firefoxImagesDir))
     fs.copyFile(p, p.replace(imagesDir, chromeImagesDir))
   }
@@ -82,7 +95,7 @@ const main = async () => {
   await fs.mkdir(firefoxImagesDir, { recursive: true })
   await fs.mkdir(chromeImagesDir, { recursive: true })
   const tsc = cp.exec(
-    "yarn tsc --watch", 
+    'yarn tsc --watch',
     {
       cwd: path.join(__dirname, '..'),
     },
