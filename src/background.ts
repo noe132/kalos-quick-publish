@@ -39,8 +39,8 @@ const pages = [
   zhihuAnswerPost,
   zhihuZhuanlanPost,
 ]
-const kalosUploadPage = 'http://local.test.prsdev.club/upload'
-const kalosPostUploadPage = 'http://local.test.prsdev.club/upload-post'
+const kalosUploadPage = 'https://kalos.art/upload'
+const kalosPostUploadPage = 'https://kalos.art/upload-post'
 const uploadState = new Map<number, UploadStateItem>()
 const postPullState = new Map<number, PostUploadStateItem>()
 const postUploadState = new Map<number, PostUploadStateItem>()

@@ -23,7 +23,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "http://local.test.prsdev.club/*"
+    "https://kalos.art/*"
   ],
   "content_scripts": [
     {
@@ -31,8 +31,8 @@
         "upload_content.js"
       ],  
       "matches": [
-        "http://local.test.prsdev.club/upload",
-        "http://local.test.prsdev.club/upload/*"
+        "https://kalos.art/upload",
+        "https://kalos.art/upload/*"
       ]
     },
     {
@@ -40,8 +40,8 @@
         "post_upload_content.js"
       ],
       "matches": [
-        "http://local.test.prsdev.club/upload-post",
-        "http://local.test.prsdev.club/upload-post/*"
+        "https://kalos.art/upload-post",
+        "https://kalos.art/upload-post/*"
       ]
     }
   ],
