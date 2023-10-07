@@ -44,7 +44,7 @@ const kalosPostUploadPage = 'http://local.test.prsdev.club/upload-post'
 const uploadState = new Map<number, UploadStateItem>()
 const postPullState = new Map<number, PostUploadStateItem>()
 const postUploadState = new Map<number, PostUploadStateItem>()
-const BATCH_SIZE = 5
+const BATCH_SIZE = 2
 
 const setIconCallback = () => {
   const error = (chrome.runtime as any).lastError
@@ -336,8 +336,8 @@ chrome.action.onClicked.addListener(() => {
               v.setAttribute('src', src)
               const buffer = await fetch(src).then((v) => v.arrayBuffer()).catch(() => null)
               if (!buffer) { return null }
-              // skip file larger than 2MB
-              if (buffer.byteLength > 2 * 2 ** 20) { return null }
+              // skip file larger than 8MB
+              if (buffer.byteLength > 8 * 2 ** 20) { return null }
 
               const base64url = await new Promise<string>((rs) => {
                 const reader = new FileReader()

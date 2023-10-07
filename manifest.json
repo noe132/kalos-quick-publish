@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "KALOS.art Post",
   "description": "Share your artworks generated on Midjourney with KALOS.art, just one click.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "icons": {
     "16": "images/chrome_ext_active_16.png",
     "32": "images/chrome_ext_active_32.png",
